@@ -7,11 +7,13 @@ import Unauthorized from "../pages/Unauthorized";
 import Dashboard from "../pages/Home/Dashboard";
 import Applicants from "../pages/Applicants";
 import UsersPage from "../pages/Dashboard/Users";
+import WorkflowTest from "../pages/Dashboard/NewForm";
 
 import ProtectedRoute from "./Protected.route";
 
 const AppRoutes = () => {
   return (
+    
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
@@ -54,7 +56,7 @@ const AppRoutes = () => {
         path="/new-form"
         element={
           <ProtectedRoute>
-            <Dashboard />
+            <WorkflowTest />
           </ProtectedRoute>
         }
       />

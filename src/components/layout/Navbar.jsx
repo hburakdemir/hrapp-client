@@ -90,7 +90,6 @@ const Navbar = () => {
             )}
           </button>
 
-          {/* Ayarlar Dropdown */}
           <div className="relative" ref={dropdownRef}>
             <button
               onClick={() => setIsSettingsOpen(!isSettingsOpen)}
@@ -112,7 +111,6 @@ const Navbar = () => {
                   borderColor: colors.bgsoft,
                 }}
               >
-                {/* RENKLER */}
                 <div className="p-4">
                   <p
                     className="text-xs font-medium mb-3"
@@ -141,7 +139,7 @@ const Navbar = () => {
                                 backgroundColor:
                                   themeOption.colors[
                                     darkMode ? "dark" : "light"
-                                  ].primary,
+                                  ].bgsoft,
                               }}
                             />
                             <div
@@ -150,7 +148,7 @@ const Navbar = () => {
                                 backgroundColor:
                                   themeOption.colors[
                                     darkMode ? "dark" : "light"
-                                  ].text,
+                                  ].primary,
                               }}
                             />
                           </div>
@@ -172,7 +170,6 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {/* FONTLAR */}
                 <div className="border-t" style={{ borderColor: colors.bg }} />
                 <div className="p-4">
                   <p
@@ -211,7 +208,6 @@ const Navbar = () => {
                   </div>
                 </div>
 
-                {/* ÇIKIŞ */}
                 <div className="border-t" style={{ borderColor: colors.text }} />
                 <div className="p-4">
                   <button
@@ -229,7 +225,6 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Sidebar bileşeni */}
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
     </>
   );

@@ -5,6 +5,9 @@ import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, LockOpen } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
+import { useTheme } from "../../context/ThemeContext";
+import toast from "react-hot-toast";
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,6 +15,7 @@ const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { colors } = useTheme();
 
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -22,29 +26,48 @@ const Login = () => {
     try {
       const res = await authAPI.login(form);
       const { accessToken, user } = res.data.data; // refreshToken yok artık
-      
+
       // AuthContext'in login fonksiyonunu kullan
       login({ accessToken, user }); // refreshToken cookie'de
-      
-      navigate('/');
+
+      navigate("/");
     } catch (err) {
-      alert(err.response?.data?.message || "Giriş başarısız");
+      toast.error(err.response?.data?.message || "Giriş başarısız");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-red-50">
+    <div
+      className="flex justify-center items-center min-h-screen"
+      style={{
+        backgroundColor: colors.bg,
+      }}
+    >
       <form
         onSubmit={handleSubmit}
-        className="bg-white shadow-lg p-6 rounded-xl w-96 flex flex-col gap-5"
+        className="shadow-lg p-6 rounded-xl w-96 flex flex-col gap-5"
+        style={{
+          backgroundColor: colors.bgsoft,
+        }}
       >
-        <h2 className="text-2xl font-semibold text-center mb-2">Giriş Yap</h2>
-        
-        {/* EMAIL FIELD */}
+        <h2
+          className="text-2xl font-semibold text-center mb-2"
+          style={{
+            color: colors.text,
+          }}
+        >
+          Giriş Yap
+        </h2>
+
         <div className="flex flex-col gap-2">
-          <span className="flex items-center gap-2 text-gray-600 text-sm font-medium">
+          <span
+            className="flex items-center gap-2  text-sm font-medium"
+            style={{
+              color: colors.text,
+            }}
+          >
             <Mail size={16} />
             <span>Email</span>
           </span>
@@ -58,9 +81,13 @@ const Login = () => {
           />
         </div>
 
-        {/* PASSWORD FIELD */}
         <div className="flex flex-col gap-2 relative">
-          <span className="flex items-center gap-2 text-gray-600 text-sm font-medium">
+          <span
+            className="flex items-center gap-2  text-sm font-medium"
+            style={{
+              color: colors.text,
+            }}
+          >
             <Lock size={16} />
             <span>Şifre</span>
           </span>
@@ -88,11 +115,14 @@ const Login = () => {
           disabled={loading}
         />
 
-        <p className="text-sm text-center text-gray-500">
+        <p className="text-sm text-center" style={{ color: colors.text }}>
           Hesabın yok mu?{" "}
           <span
             onClick={() => navigate("/register")}
-            className="text-blue-600 cursor-pointer hover:underline"
+            className=" cursor-pointer underline"
+            style={{
+              color: colors.primary,
+            }}
           >
             Kayıt ol
           </span>

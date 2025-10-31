@@ -83,51 +83,64 @@ export default function UsersPage() {
 
   return (
     <Layout>
-      <div className="p-4 lg:p-6 min-h-screen relative" style={{ backgroundColor: colors.bg }}>
-        
+      <div
+        className="p-4 lg:p-6 min-h-screen relative"
+        style={{ backgroundColor: colors.bg }}
+      >
         {/* Header */}
         <div className="mb-6">
-          <h1 className="text-xl lg:text-2xl font-bold mb-2" style={{ color: colors.text }}>
+          <h1
+            className="text-xl lg:text-2xl font-bold mb-2"
+            style={{ color: colors.text }}
+          >
             Kullanıcı Yönetimi
           </h1>
-          <p className="text-sm lg:text-base" style={{ color: colors.textMuted }}>
+          <p
+            className="text-sm lg:text-base"
+            style={{ color: colors.textMuted }}
+          >
             Sistem kullanıcılarını yönetin
           </p>
         </div>
 
-
         <div className="mb-6 space-y-4 lg:space-y-0">
-
           <div className="flex flex-col lg:flex-row gap-4 lg:items-center lg:justify-between">
             <div className="flex flex-col sm:flex-row gap-2 flex-1">
               <input
                 type="text"
                 placeholder="Kullanıcı ara..."
-                className="flex-1 border p-3 rounded-lg text-sm lg:text-base placeholder:text-black"
-                style={{ backgroundColor: colors.bgsoft, color: 'black' }}
-
+                className="flex-1 border p-3 rounded-lg text-sm lg:text-base "
+                style={{
+                  backgroundColor: colors.bgsoft,
+                  color: "black",
+                  placeItems: colors.text,
+                }}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              
+
               <div className="flex gap-2">
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="border p-3 rounded-lg text-sm lg:text-base min-w-0 flex-1 sm:flex-none sm:min-w-[120px]"
-                               style={{ backgroundColor: colors.bgsoft, color: 'black' }}
-
+                  style={{
+                    backgroundColor: colors.bgsoft,
+                    color: colors.text,
+                  }}
                 >
                   <option value="name">İsim</option>
                   <option value="createdAt">Tarih</option>
                 </select>
-                
+
                 <select
                   value={order}
                   onChange={(e) => setOrder(e.target.value)}
                   className="border p-3 rounded-lg text-sm lg:text-base min-w-0 flex-1 sm:flex-none sm:min-w-[100px]"
-                               style={{ backgroundColor: colors.bgsoft, color: 'black' }}
-
+                  style={{
+                    backgroundColor: colors.bgsoft,
+                    color: colors.text,
+                  }}
                 >
                   <option value="asc">A-Z</option>
                   <option value="desc">Z-A</option>
@@ -137,12 +150,18 @@ export default function UsersPage() {
 
             <Button
               onClick={() => {
-                setNewUser({ name: "", surname: "", email: "", password: "", role: "" });
+                setNewUser({
+                  name: "",
+                  surname: "",
+                  email: "",
+                  password: "",
+                  role: "",
+                });
                 setEditingUser(null);
                 setIsModalOpen(true);
               }}
               className="w-full sm:w-auto px-4 py-3 rounded-lg flex items-center justify-center gap-2 text-sm lg:text-base"
-              style={{ backgroundColor: colors.bgsoft, color: 'black' }}
+              style={{ backgroundColor: colors.bgsoft, color: "black" }}
             >
               <Plus size={20} />
               <span className="hidden sm:inline">Yeni Kullanıcı</span>
@@ -154,58 +173,92 @@ export default function UsersPage() {
         {/* Users Table/Cards */}
         {loading ? (
           <div className="flex justify-center items-center py-12">
-            <p className="text-lg" style={{ color: colors.text }}>Yükleniyor...</p>
+            <p className="text-lg" style={{ color: colors.text }}>
+              Yükleniyor...
+            </p>
           </div>
         ) : (
           <>
             {/* Desktop Table View */}
             <div className="hidden lg:block">
-              <div className="rounded-xl shadow-sm overflow-hidden" >
+              <div className="rounded-xl shadow-sm overflow-hidden">
                 <table className="min-w-full">
                   <thead style={{ backgroundColor: colors.bgLight }}>
                     <tr>
-                      <th className="px-6 py-4 text-left text-sm font-medium" style={{ color: colors.primary, backgroundColor:colors.bgsoft}}>
+                      <th
+                        className="px-6 py-4 text-left text-sm font-medium"
+                        style={{
+                          color: colors.primary,
+                          backgroundColor: colors.bgsoft,
+                        }}
+                      >
                         İsim
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium" style={{ color: colors.primary, backgroundColor:colors.bgsoft }}>
+                      <th
+                        className="px-6 py-4 text-left text-sm font-medium"
+                        style={{
+                          color: colors.primary,
+                          backgroundColor: colors.bgsoft,
+                        }}
+                      >
                         Email
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium" style={{ color: colors.primary, backgroundColor:colors.bgsoft }}>
+                      <th
+                        className="px-6 py-4 text-left text-sm font-medium"
+                        style={{
+                          color: colors.primary,
+                          backgroundColor: colors.bgsoft,
+                        }}
+                      >
                         Rol
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium" style={{ color: colors.primary, backgroundColor:colors.bgsoft }}>
+                      <th
+                        className="px-6 py-4 text-left text-sm font-medium"
+                        style={{
+                          color: colors.primary,
+                          backgroundColor: colors.bgsoft,
+                        }}
+                      >
                         Kayıt Tarihi
                       </th>
-                      <th className="px-6 py-4 text-left text-sm font-medium" style={{ color: colors.primary, backgroundColor:colors.bgsoft }}>
+                      <th
+                        className="px-6 py-4 text-left text-sm font-medium"
+                        style={{
+                          color: colors.primary,
+                          backgroundColor: colors.bgsoft,
+                        }}
+                      >
                         İşlemler
                       </th>
                     </tr>
                   </thead>
                   <tbody>
                     {users.map((user) => (
-                      <tr 
-                        key={user.id} 
+                      <tr
+                        key={user.id}
                         className="border-t transition-colors hover:bg-opacity-50"
-                        style={{ 
+                        style={{
                           borderColor: colors.bgLight,
-                          color: colors.text 
+                          color: colors.text,
                         }}
                       >
-                        <td className="px-6 py-4 text-sm">{user.name} {user.surname}</td>
+                        <td className="px-6 py-4 text-sm">
+                          {user.name} {user.surname}
+                        </td>
                         <td className="px-6 py-4 text-sm">{user.email}</td>
                         <td className="px-6 py-4 text-sm">
-                          <span 
+                          <span
                             className="px-2 py-1 rounded-full text-xs font-medium"
-                            style={{ 
+                            style={{
                               backgroundColor: `${colors.primary}20`,
-                              color: colors.primary 
+                              color: colors.primary,
                             }}
                           >
                             {user.role}
                           </span>
                         </td>
                         <td className="px-6 py-4 text-sm">
-                          {new Date(user.createdAt).toLocaleDateString('tr-TR')}
+                          {new Date(user.createdAt).toLocaleDateString("tr-TR")}
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
@@ -217,7 +270,7 @@ export default function UsersPage() {
                               className="p-2 rounded-l transition-colors"
                               title="Düzenle"
                             >
-                              <Edit size={16} className="text-yellow-600" />
+                              <Edit size={16} style={{color:colors.text}} />
                             </button>
                             <button
                               onClick={() => deleteUser(user.id)}
@@ -235,23 +288,29 @@ export default function UsersPage() {
               </div>
             </div>
 
-            {/* Mobile/Tablet Card View */}
+            {/* responsive */}
             <div className="lg:hidden space-y-4">
               {users.map((user) => (
-                <div 
+                <div
                   key={user.id}
                   className="rounded-lg p-4 shadow-sm border"
-                  style={{ 
+                  style={{
                     backgroundColor: colors.bgsoft,
-                    borderColor: colors.bgLight 
+                    borderColor: colors.bgLight,
                   }}
                 >
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-semibold text-base" style={{ color: colors.text }}>
+                      <h3
+                        className="font-semibold text-base"
+                        style={{ color: colors.text }}
+                      >
                         {user.name} {user.surname}
                       </h3>
-                      <p className="text-sm mt-1" style={{ color: colors.textMuted }}>
+                      <p
+                        className="text-sm mt-1"
+                        style={{ color: colors.textMuted }}
+                      >
                         {user.email}
                       </p>
                     </div>
@@ -273,19 +332,22 @@ export default function UsersPage() {
                       </button>
                     </div>
                   </div>
-                  
+
                   <div className="flex justify-between items-center">
-                    <span 
+                    <span
                       className="px-3 py-1 rounded-full text-xs font-medium"
-                      style={{ 
+                      style={{
                         backgroundColor: `${colors.primary}20`,
-                        color: colors.primary 
+                        color: colors.primary,
                       }}
                     >
                       {user.role}
                     </span>
-                    <span className="text-xs" style={{ color: colors.textMuted }}>
-                      {new Date(user.createdAt).toLocaleDateString('tr-TR')}
+                    <span
+                      className="text-xs"
+                      style={{ color: colors.textMuted }}
+                    >
+                      {new Date(user.createdAt).toLocaleDateString("tr-TR")}
                     </span>
                   </div>
                 </div>
@@ -294,7 +356,7 @@ export default function UsersPage() {
           </>
         )}
 
-        {/* Empty State */}
+        {/* empty*/}
         {!loading && users.length === 0 && (
           <div className="text-center py-12">
             <p className="text-lg mb-2" style={{ color: colors.textMuted }}>
@@ -306,35 +368,48 @@ export default function UsersPage() {
           </div>
         )}
 
-        {/* Modal */}
         {isModalOpen && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div 
+            <div
               className="rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-y-auto"
               style={{ backgroundColor: colors.bg }}
             >
               <div className="p-6">
-                <h2 className="text-xl font-semibold mb-6 text-center" style={{ color: colors.text }}>
-                  {editingUser ? "Kullanıcıyı Düzenle" : "Yeni Kullanıcı Oluştur"}
+                <h2
+                  className="text-xl font-semibold mb-6 text-center"
+                  style={{ color: colors.text }}
+                >
+                  {editingUser
+                    ? "Kullanıcıyı Düzenle"
+                    : "Yeni Kullanıcı Oluştur"}
                 </h2>
 
-                <form onSubmit={editingUser ? updateUser : createUser} className="space-y-4">
+                <form
+                  onSubmit={editingUser ? updateUser : createUser}
+                  className="space-y-4"
+                >
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
+                    <label
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: colors.text }}
+                    >
                       İsim
                     </label>
                     <input
                       type="text"
                       className="w-full border p-3 rounded-lg text-sm"
-                      style={{ 
-                        borderColor: colors.bgLight, 
+                      style={{
+                        borderColor: colors.bgLight,
                         backgroundColor: colors.bgsoft,
-                        color: colors.text 
+                        color: colors.text,
                       }}
                       value={editingUser ? editingUser.name : newUser.name}
                       onChange={(e) =>
                         editingUser
-                          ? setEditingUser({ ...editingUser, name: e.target.value })
+                          ? setEditingUser({
+                              ...editingUser,
+                              name: e.target.value,
+                            })
                           : setNewUser({ ...newUser, name: e.target.value })
                       }
                       required
@@ -342,21 +417,29 @@ export default function UsersPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
+                    <label
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: colors.text }}
+                    >
                       Soyisim
                     </label>
                     <input
                       type="text"
                       className="w-full border p-3 rounded-lg text-sm"
-                      style={{ 
-                        borderColor: colors.bgLight, 
+                      style={{
+                        borderColor: colors.bgLight,
                         backgroundColor: colors.bgsoft,
-                        color: colors.text 
+                        color: colors.text,
                       }}
-                      value={editingUser ? editingUser.surname : newUser.surname}
+                      value={
+                        editingUser ? editingUser.surname : newUser.surname
+                      }
                       onChange={(e) =>
                         editingUser
-                          ? setEditingUser({ ...editingUser, surname: e.target.value })
+                          ? setEditingUser({
+                              ...editingUser,
+                              surname: e.target.value,
+                            })
                           : setNewUser({ ...newUser, surname: e.target.value })
                       }
                       required
@@ -364,21 +447,27 @@ export default function UsersPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
+                    <label
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: colors.text }}
+                    >
                       Email
                     </label>
                     <input
                       type="email"
                       className="w-full border p-3 rounded-lg text-sm"
-                      style={{ 
-                        borderColor: colors.bgLight, 
+                      style={{
+                        borderColor: colors.bgLight,
                         backgroundColor: colors.bgsoft,
-                        color: colors.text 
+                        color: colors.text,
                       }}
                       value={editingUser ? editingUser.email : newUser.email}
                       onChange={(e) =>
                         editingUser
-                          ? setEditingUser({ ...editingUser, email: e.target.value })
+                          ? setEditingUser({
+                              ...editingUser,
+                              email: e.target.value,
+                            })
                           : setNewUser({ ...newUser, email: e.target.value })
                       }
                       required
@@ -386,21 +475,34 @@ export default function UsersPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
-                      Şifre {editingUser && <span className="text-xs">(boş bırakılabilir)</span>}
+                    <label
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: colors.text }}
+                    >
+                      Şifre{" "}
+                      {editingUser && (
+                        <span className="text-xs">(boş bırakılabilir)</span>
+                      )}
                     </label>
                     <input
                       type="password"
                       className="w-full border p-3 rounded-lg text-sm"
-                      style={{ 
-                        borderColor: colors.bgLight, 
+                      style={{
+                        borderColor: colors.bgLight,
                         backgroundColor: colors.bgsoft,
-                        color: colors.text 
+                        color: colors.text,
                       }}
-                      value={editingUser ? editingUser.password || '' : newUser.password}
+                      value={
+                        editingUser
+                          ? editingUser.password || ""
+                          : newUser.password
+                      }
                       onChange={(e) =>
                         editingUser
-                          ? setEditingUser({ ...editingUser, password: e.target.value })
+                          ? setEditingUser({
+                              ...editingUser,
+                              password: e.target.value,
+                            })
                           : setNewUser({ ...newUser, password: e.target.value })
                       }
                       required={!editingUser}
@@ -408,21 +510,29 @@ export default function UsersPage() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2" style={{ color: colors.text }}>
+                    <label
+                      className="block text-sm font-medium mb-2"
+                      style={{ color: colors.text }}
+                    >
                       Rol
                     </label>
                     <select
-                      value={editingUser ? editingUser.role : newUser.role || ""}
+                      value={
+                        editingUser ? editingUser.role : newUser.role || ""
+                      }
                       onChange={(e) =>
                         editingUser
-                          ? setEditingUser({ ...editingUser, role: e.target.value })
+                          ? setEditingUser({
+                              ...editingUser,
+                              role: e.target.value,
+                            })
                           : setNewUser({ ...newUser, role: e.target.value })
                       }
                       className="w-full border p-3 rounded-lg text-sm"
-                      style={{ 
-                        borderColor: colors.bgLight, 
+                      style={{
+                        borderColor: colors.bgLight,
                         backgroundColor: colors.bgsoft,
-                        color: colors.text 
+                        color: colors.text,
                       }}
                       required
                     >
@@ -441,9 +551,9 @@ export default function UsersPage() {
                         setEditingUser(null);
                       }}
                       className="flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-colors"
-                      style={{ 
+                      style={{
                         backgroundColor: colors.bgLight,
-                        color: colors.text 
+                        color: colors.text,
                       }}
                     >
                       İptal

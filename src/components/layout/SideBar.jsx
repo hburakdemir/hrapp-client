@@ -84,17 +84,17 @@ const Sidebar = ({ isOpen, onClose }) => {
           <div className="flex items-center space-x-3 px-4 py-3">
             <div
               className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm"
-              style={{ backgroundColor: colors.bgsoft, color: colors.text }}
+              style={{ backgroundColor: colors.primary, color: colors.text }}
             >
               {user?.name && user?.surname
                 ? `${user.name[0]}${user.surname[0]}`.toUpperCase()
                 : 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate" style={{ color: colors.text }}>
+              <p className="font-medium text-sm truncate" style={{ color: colors.primary }}>
                 {user?.name} {user?.surname}
               </p>
-              <p className="text-xs truncate" style={{ color: colors.textMuted }}>
+              <p className="text-xs truncate" style={{ color: colors.text }}>
                 {user?.email}
               </p>
             </div>
