@@ -8,6 +8,7 @@ import Dashboard from "../pages/Home/Dashboard";
 import Applicants from "../pages/Applicants";
 import UsersPage from "../pages/Dashboard/Users";
 import WorkflowTest from "../pages/Dashboard/NewForm";
+import Profile from "../pages/profile/Profile";
 
 import ProtectedRoute from "./Protected.route";
 
@@ -25,6 +26,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedRoute>
+            <Profile />
           </ProtectedRoute>
         }
       />

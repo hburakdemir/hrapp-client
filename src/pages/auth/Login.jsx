@@ -21,22 +21,36 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await authAPI.login(form);
-      const { accessToken, user } = res.data.data; // refreshToken yok artık
+  e.preventDefault();
+  setLoading(true);
+  try {
+    const res = await authAPI.login(form);
+    const { accessToken, user } = res.data.data;
 
-      // AuthContext'in login fonksiyonunu kullan
-      login({ accessToken, user }); // refreshToken cookie'de
+    // login fonksiyonunu çalıştır
+    login({ accessToken, user }); // refreshToken cookie'de
 
-      navigate("/");
-    } catch (err) {
-      toast.error(err.response?.data?.message || "Giriş başarısız");
-    } finally {
-      setLoading(false);
+    // Candidate kullanıcıysa profil kontrolü yap
+    if (user.role === "CANDIDATE") {
+      // Backend’de candidate profili eksik mi kontrol eden endpoint
+      const profileRes = await authAPI.getProfileStauts(); // GET /api/users/profile-status
+      const { profileComplete } = profileRes.data.data;
+
+      if (!profileComplete) {
+        navigate("/profile"); // profil eksikse yönlendir
+      } else {
+        navigate("/"); // profil tamamsa anasayfa
+      }
+    } else {
+      navigate("/"); // HR veya Admin ise direkt anasayfa
     }
-  };
+
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Giriş başarısız");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div
