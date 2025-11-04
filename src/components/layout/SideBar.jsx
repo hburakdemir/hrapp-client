@@ -1,105 +1,315 @@
+import { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
 import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
-import { X } from 'lucide-react';
+import { 
+  X, ChevronDown, ChevronRight, Home, FileText, Users, Mail, 
+  Briefcase, Settings, Calendar, BarChart3, UserCheck, Shield,
+  Plus, FolderOpen, CheckSquare
+} from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { colors, font } = useTheme();
   const location = useLocation();
-  const { user } = useAuth();
+  const [openMenus, setOpenMenus] = useState({});
+  const [hoveredItem, setHoveredItem] = useState(null);
+
+  // Auto-open menu if current page is in that group
+  useEffect(() => {
+    const currentPath = location.pathname;
+    
+    if (['/my-forms', '/forms', '/new-form', '/applicants'].includes(currentPath)) {
+      setOpenMenus(prev => ({ ...prev, applications: true }));
+    }
+    
+    if (['/workflows', '/tasks', '/candidates', '/reports'].includes(currentPath)) {
+      setOpenMenus(prev => ({ ...prev, recruitment: true }));
+    }
+    
+    if (['/users', '/settings', '/permissions'].includes(currentPath)) {
+      setOpenMenus(prev => ({ ...prev, system: true }));
+    }
+  }, [location.pathname]);
+
+  const toggleMenu = (menuKey) => {
+    setOpenMenus(prev => ({
+      ...prev,
+      [menuKey]: !prev[menuKey]
+    }));
+  };
 
   const menuItems = [
-    { label: 'Dashboard', path: '/' },
-    { label: 'Başvuru Formlarım', path: '/my-forms' },
-    { label: 'Başvuru Formları', path: '/forms' },
-    { label: 'Başvuranlar', path: '/applicants' },
-    { label: 'Kullanıcılar', path: '/users' },
-    { label: 'Yeni Form', path: '/new-form' },
-    { label: 'İletişim', path: '/contact' },
+    {
+      key: 'dashboard',
+      label: 'Dashboard',
+      icon: Home,
+      path: '/',
+      type: 'single'
+    },
+    {
+      key: 'applications',
+      label: 'Başvuru Yönetimi',
+      icon: FileText,
+      type: 'group',
+      badge: '4',
+      children: [
+        { label: 'Başvuru Formlarım', path: '/my-forms', icon: FolderOpen },
+        { label: 'Başvuru Formları', path: '/forms', icon: FileText },
+        { label: 'Yeni Form', path: '/new-form', icon: Plus },
+        { label: 'Başvuranlar', path: '/applicants', icon: Users, badge: '12' }
+      ]
+    },
+    {
+      key: 'recruitment',
+      label: 'İşe Alım Süreci',
+      icon: Briefcase,
+      type: 'group',
+      badge: '3',
+      children: [
+        { label: 'Şablonlar', path: '/workflows', icon: Calendar },
+        { label: 'Görevler', path: '/tasks', icon: CheckSquare, badge: '5' },
+        { label: 'Adaylar', path: '/candidates', icon: UserCheck },
+        { label: 'Raporlar', path: '/reports', icon: BarChart3 }
+      ]
+    },
+    {
+      key: 'system',
+      label: 'Sistem Yönetimi',
+      icon: Settings,
+      type: 'group',
+      children: [
+        { label: 'Kullanıcılar', path: '/users', icon: Users },
+        { label: 'Ayarlar', path: '/settings', icon: Settings },
+        { label: 'Yetkiler', path: '/permissions', icon: Shield }
+      ]
+    },
+    {
+      key: 'contact',
+      label: 'İletişim',
+      icon: Mail,
+      path: '/contact',
+      type: 'single'
+    }
   ];
+
+  const isItemActive = (path) => {
+    return location.pathname === path;
+  };
+
+  const isGroupActive = (children) => {
+    return children.some(child => location.pathname === child.path);
+  };
+
+  const Badge = ({ count, color = colors.primary }) => {
+    if (!count) return null;
+    
+    return (
+      <span 
+        className="px-2 py-1 text-xs font-medium rounded-full min-w-[20px] text-center"
+        style={{ 
+          backgroundColor: color + '20',
+          color: color
+        }}
+      >
+        {count}
+      </span>
+    );
+  };
+
+  const renderMenuItem = (item) => {
+    if (item.type === 'single') {
+      const isActive = isItemActive(item.path);
+      const Icon = item.icon;
+      const isHovered = hoveredItem === item.key;
+      
+      return (
+        <Link
+          key={item.key}
+          to={item.path}
+          onClick={onClose} // Navigation sonrası sidebar'ı kapat
+          onMouseEnter={() => setHoveredItem(item.key)}
+          onMouseLeave={() => setHoveredItem(null)}
+          className={`
+            flex items-center justify-between px-4 py-3 rounded-lg 
+            transition-all duration-200 transform
+            ${isHovered ? 'scale-[1.02] shadow-sm' : ''}
+          `}
+          style={{
+            backgroundColor: isActive 
+              ? `${colors.primary}15` 
+              : isHovered 
+                ? `${colors.primary}08` 
+                : 'transparent',
+            color: isActive ? colors.primary : colors.text,
+            borderLeft: isActive ? `3px solid ${colors.primary}` : '3px solid transparent'
+          }}
+        >
+          <div className="flex items-center space-x-3">
+            <Icon size={18} />
+            <span className="font-medium text-sm lg:text-base">{item.label}</span>
+          </div>
+          <Badge count={item.badge} />
+        </Link>
+      );
+    }
+
+    if (item.type === 'group') {
+      const isOpen = openMenus[item.key];
+      const isActive = isGroupActive(item.children);
+      const Icon = item.icon;
+      const ChevronIcon = isOpen ? ChevronDown : ChevronRight;
+      const isHovered = hoveredItem === item.key;
+
+      return (
+        <div key={item.key} className="space-y-1">
+          {/* Group Header */}
+          <button
+            onClick={() => toggleMenu(item.key)}
+            onMouseEnter={() => setHoveredItem(item.key)}
+            onMouseLeave={() => setHoveredItem(null)}
+            className={`
+              w-full flex items-center justify-between px-4 py-3 rounded-lg 
+              transition-all duration-200 transform
+              ${isHovered ? 'scale-[1.02] shadow-sm' : ''}
+            `}
+            style={{
+              backgroundColor: isActive 
+                ? `${colors.primary}10` 
+                : isHovered 
+                  ? `${colors.primary}08` 
+                  : 'transparent',
+              color: isActive ? colors.primary : colors.text,
+              borderLeft: isActive ? `3px solid ${colors.primary}` : '3px solid transparent'
+            }}
+          >
+            <div className="flex items-center space-x-3">
+              <Icon size={18} />
+              <span className="font-medium text-sm lg:text-base">{item.label}</span>
+              <Badge count={item.badge} />
+            </div>
+            <ChevronIcon 
+              size={16} 
+              className={`transition-transform duration-300 ${isOpen ? 'rotate-0' : 'rotate-0'}`}
+            />
+          </button>
+
+          {/* Group Children */}
+          <div 
+            className={`
+              ml-4 pl-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out
+              ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
+            `}
+            style={{ borderLeft: `2px solid ${colors.bgLight}` }}
+          >
+            {item.children.map((child, index) => {
+              const isChildActive = isItemActive(child.path);
+              const ChildIcon = child.icon;
+              const childHovered = hoveredItem === `${item.key}-${index}`;
+              
+              return (
+                <Link
+                  key={index}
+                  to={child.path}
+                  onClick={onClose} // Navigation sonrası sidebar'ı kapat
+                  onMouseEnter={() => setHoveredItem(`${item.key}-${index}`)}
+                  onMouseLeave={() => setHoveredItem(null)}
+                  className={`
+                    flex items-center justify-between px-4 py-2 rounded-lg 
+                    transition-all duration-200 transform
+                    ${childHovered ? 'translate-x-1 shadow-sm' : ''}
+                  `}
+                  style={{
+                    backgroundColor: isChildActive 
+                      ? `${colors.primary}20` 
+                      : childHovered 
+                        ? `${colors.primary}10` 
+                        : 'transparent',
+                    color: isChildActive ? colors.primary : colors.textSoft,
+                  }}
+                >
+                  <div className="flex items-center space-x-3">
+                    {ChildIcon ? (
+                      <ChildIcon size={16} />
+                    ) : (
+                      <div 
+                        className="w-2 h-2 rounded-full"
+                        style={{ 
+                          backgroundColor: isChildActive ? colors.primary : colors.textSoft 
+                        }}
+                      />
+                    )}
+                    <span className="font-medium text-sm">{child.label}</span>
+                  </div>
+                  <Badge count={child.badge} />
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      );
+    }
+  };
 
   return (
     <>
+      {/* Backdrop Overlay - Her zaman göster (mobile + desktop) */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 backdrop-blur-sm"
           onClick={onClose}
         />
       )}
+
+      {/* Sidebar - Her zaman hamburger ile kontrol edilir */}
       <aside
         className={`
           fixed top-0 left-0 z-50
           w-64 h-full flex flex-col
-          transform transition-transform duration-300 ease-in-out
-          lg:translate-x-0
+          transform transition-all duration-300 ease-in-out
+          shadow-xl
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
         `}
         style={{
           backgroundColor: colors.bg,
           fontFamily: `var(--font-family, ${font})`,
+          borderRight: `1px solid ${colors.bgLight}`
         }}
       >
-        <div className="h-16 flex items-center px-6">
+        {/* Header */}
+        <div 
+          className="h-16 flex items-center px-6 border-b relative"
+          style={{ borderColor: colors.bgLight }}
+        >
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white"
-            style={{ backgroundColor: colors.primary }}
+            className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white shadow-lg transform transition-transform hover:scale-110"
+            style={{ 
+              backgroundColor: colors.primary,
+              backgroundImage: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`
+            }}
           >
             L
           </div>
           <span className="ml-3 font-semibold text-lg" style={{ color: colors.text }}>
             LOGO
           </span>
-
+          
+          {/* Close Button - Hem mobile hem desktop'ta göster */}
           <button
             onClick={onClose}
-            className="ml-auto lg:hidden p-2 rounded-lg"
+            className="ml-auto p-2 rounded-lg transition-all duration-200 hover:bg-red-50 hover:text-red-600"
             style={{ color: colors.text }}
             aria-label="Menüyü kapat"
           >
-            <X size={22} style={{ color: colors.text }} />
+            <X size={22} />
           </button>
         </div>
 
-        <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
-          {menuItems.map((item) => {
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={onClose}
-                className="flex items-center space-x-3 px-4 py-3 rounded-lg transition-all"
-                style={{
-                  backgroundColor: isActive ? `${colors.primary}15` : 'transparent',
-                  color: isActive ? colors.primary : colors.text,
-                }}
-              >
-                <span className="font-medium text-sm lg:text-base">{item.label}</span>
-              </Link>
-            );
-          })}
+        {/* Navigation */}
+        <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
+          {menuItems.map(renderMenuItem)}
         </nav>
 
-        <div className="p-4 border-t" style={{ borderColor: colors.bgLight }}>
-          <div className="flex items-center space-x-3 px-4 py-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm"
-              style={{ backgroundColor: colors.primary, color: colors.text }}
-            >
-              {user?.name && user?.surname
-                ? `${user.name[0]}${user.surname[0]}`.toUpperCase()
-                : 'U'}
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm truncate" style={{ color: colors.primary }}>
-                {user?.name} {user?.surname}
-              </p>
-              <p className="text-xs truncate" style={{ color: colors.text }}>
-                {user?.email}
-              </p>
-            </div>
-          </div>
-        </div>
+
+        
       </aside>
     </>
   );

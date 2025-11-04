@@ -6,4 +6,8 @@ export const workflowAPI = {
   create: (data) => api.post("/workflows/add", data),
   update: (id, data) => api.put(`/workflows/update/${id}`, data),
   delete: (id) => api.delete(`/workflows/delete/${id}`),
+  
+  // workflow atama bu
+  assignToCandidate: (data) => api.post("/workflows/assign", data),
+  
 };
