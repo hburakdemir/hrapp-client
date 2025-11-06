@@ -7,7 +7,7 @@ import Unauthorized from "../pages/Unauthorized";
 import Dashboard from "../pages/Home/Dashboard";
 import Applicants from "../pages/Applicants";
 import UsersPage from "../pages/Dashboard/Users";
-import WorkflowTest from "../pages/Dashboard/NewForm";
+import NewWorkflow from "../pages/Dashboard/NewWorkflow";
 import Profile from "../pages/profile/Profile";
 
 import ProtectedRoute from "./Protected.route";
@@ -62,10 +62,10 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="/new-form"
+        path="/yeni-sablon"
         element={
           <ProtectedRoute>
-            <WorkflowTest />
+            <NewWorkflow />
           </ProtectedRoute>
         }
       />

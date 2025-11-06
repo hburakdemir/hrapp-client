@@ -13,7 +13,6 @@ const Sidebar = ({ isOpen, onClose }) => {
   const [openMenus, setOpenMenus] = useState({});
   const [hoveredItem, setHoveredItem] = useState(null);
 
-  // Auto-open menu if current page is in that group
   useEffect(() => {
     const currentPath = location.pathname;
     
@@ -54,7 +53,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       children: [
         { label: 'Başvuru Formlarım', path: '/my-forms', icon: FolderOpen },
         { label: 'Başvuru Formları', path: '/forms', icon: FileText },
-        { label: 'Yeni Form', path: '/new-form', icon: Plus },
+        { label: 'Yeni Form', path: '/yeni-sablon', icon: Plus },
         { label: 'Başvuranlar', path: '/applicants', icon: Users, badge: '12' }
       ]
     },
@@ -125,7 +124,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         <Link
           key={item.key}
           to={item.path}
-          onClick={onClose} // Navigation sonrası sidebar'ı kapat
+          onClick={onClose}
           onMouseEnter={() => setHoveredItem(item.key)}
           onMouseLeave={() => setHoveredItem(null)}
           className={`
@@ -161,7 +160,6 @@ const Sidebar = ({ isOpen, onClose }) => {
 
       return (
         <div key={item.key} className="space-y-1">
-          {/* Group Header */}
           <button
             onClick={() => toggleMenu(item.key)}
             onMouseEnter={() => setHoveredItem(item.key)}
@@ -191,8 +189,6 @@ const Sidebar = ({ isOpen, onClose }) => {
               className={`transition-transform duration-300 ${isOpen ? 'rotate-0' : 'rotate-0'}`}
             />
           </button>
-
-          {/* Group Children */}
           <div 
             className={`
               ml-4 pl-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out
@@ -209,7 +205,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <Link
                   key={index}
                   to={child.path}
-                  onClick={onClose} // Navigation sonrası sidebar'ı kapat
+                  onClick={onClose} 
                   onMouseEnter={() => setHoveredItem(`${item.key}-${index}`)}
                   onMouseLeave={() => setHoveredItem(null)}
                   className={`
@@ -251,15 +247,12 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   return (
     <>
-      {/* Backdrop Overlay - Her zaman göster (mobile + desktop) */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black bg-opacity-50 z-40 backdrop-blur-sm"
           onClick={onClose}
         />
       )}
-
-      {/* Sidebar - Her zaman hamburger ile kontrol edilir */}
       <aside
         className={`
           fixed top-0 left-0 z-50
@@ -274,7 +267,6 @@ const Sidebar = ({ isOpen, onClose }) => {
           borderRight: `1px solid ${colors.bgLight}`
         }}
       >
-        {/* Header */}
         <div 
           className="h-16 flex items-center px-6 border-b relative"
           style={{ borderColor: colors.bgLight }}
@@ -291,8 +283,6 @@ const Sidebar = ({ isOpen, onClose }) => {
           <span className="ml-3 font-semibold text-lg" style={{ color: colors.text }}>
             LOGO
           </span>
-          
-          {/* Close Button - Hem mobile hem desktop'ta göster */}
           <button
             onClick={onClose}
             className="ml-auto p-2 rounded-lg transition-all duration-200 hover:bg-red-50 hover:text-red-600"
@@ -303,7 +293,6 @@ const Sidebar = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
           {menuItems.map(renderMenuItem)}
         </nav>
