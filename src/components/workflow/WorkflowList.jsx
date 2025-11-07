@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
 import { workflowAPI } from "../../api/modules/workflow";
+import { stageAPI } from "../../api/modules/stage"; 
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
 
 export default function WorkflowList() {
   const [workflows, setWorkflows] = useState([]);
+  const [stages, setStages] = useState([]); 
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [editModal, setEditModal] = useState(null);
   const [editName, setEditName] = useState("");
   const navigate = useNavigate();
+  const { colors } = useTheme();
 
   const fetchWorkflows = async () => {
     try {
       setLoading(true);
       const res = await workflowAPI.getAll();
-      const list = res.data?.data;
-      setWorkflows(Array.isArray(list) ? list : []);
-      setFiltered(Array.isArray(list) ? list : []);
-      console.log("response", res.data);
+      const list = res.data?.data || [];
+      setWorkflows(list);
+      setFiltered(list);
     } catch (err) {
       console.error(err);
       toast.error("Şablonlar alınamadı.");
@@ -28,29 +31,31 @@ export default function WorkflowList() {
     }
   };
 
+  const fetchStages = async () => {
+    try {
+      const res = await stageAPI.getAll();
+      setStages(res.data?.data || []);
+    } catch (err) {
+      console.error(err);
+      toast.error("Aşamalar alınamadı.");
+    }
+  };
+
   useEffect(() => {
     fetchWorkflows();
+    fetchStages();
   }, []);
+
 
   useEffect(() => {
     const lower = search.toLowerCase();
-
-    const filteredList = workflows.filter((w) => {
-      // şablon adı 
-      const nameMatch = w.name.toLowerCase().includes(lower);
-
-      // aşama 
-      const stageMatch = w.stages.some((stage) =>
-        stage.toLowerCase().includes(lower)
-      );
-
-      return nameMatch || stageMatch;
-    });
-
+    const filteredList = workflows.filter((w) =>
+      w.name.toLowerCase().includes(lower)
+    );
     setFiltered(filteredList);
   }, [search, workflows]);
 
-  // Silme
+
   const handleDelete = async (id) => {
     if (!confirm("Bu şablonu silmek istediğine emin misin?")) return;
     try {
@@ -63,13 +68,11 @@ export default function WorkflowList() {
     }
   };
 
-  // düzenleme aç
   const openEdit = (workflow) => {
     setEditModal(workflow);
     setEditName(workflow.name);
   };
 
-  // düzenleme kaydet
   const handleUpdate = async () => {
     try {
       await workflowAPI.update(editModal.id, { name: editName });
@@ -90,66 +93,99 @@ export default function WorkflowList() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Ara..."
-          className="border border-gray-300 rounded px-3 py-2 focus:ring focus:ring-blue-200 outline-none"
+          className="border rounded px-3 py-2 outline-none"
+          style={{
+            borderColor: colors.text,
+            color: colors.text,
+          }}
         />
       </div>
 
       {loading ? (
         <p>Yükleniyor...</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 auto-rows-auto">
           {filtered.length > 0 ? (
-            filtered.map((wf) => (
-              <div
-                key={wf.id}
-                className="p-4 bg-white rounded-lg shadow hover:shadow-md transition"
-              >
-                <h3 className="text-lg font-semibold mb-2">{wf.name}</h3>
-                <ul className="flex flex-wrap gap-2 mb-4">
-                  {wf.stages?.length > 0 ? (
-                    wf.stages.map((stage, i) => (
-                      <span
-                        key={i}
-                        className="px-2 py-1 text-xs bg-gray-100 border border-gray-200 rounded-full text-gray-700"
-                      >
-                        {stage}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-gray-400 text-sm italic">
-                      Aşama yok
-                    </span>
-                  )}
-                </ul>
+            filtered.map((wf) => {
+              const relatedStages = stages.filter(
+                (s) => s.workflowId === wf.id
+              ); 
+              return (
+                <div
+                  key={wf.id}
+                  className="p-4 rounded-2xl shadow hover:shadow-md transition flex flex-col"
+                  style={{ backgroundColor: colors.bgsoft }}
+                >
+                  <h3 className="text-lg font-semibold mb-2">{wf.name}</h3>
 
-                <div className="flex justify-end gap-2 text-sm">
-                  <button
-                    onClick={() => navigate(`/sablonlar/${wf.id}`)}
-                    className="px-3 py-1 border rounded hover:bg-gray-100"
+                  <p
+                    className={`text-xs font-medium mb-2 ${
+                      wf.isActive ? "text-green-600" : "text-red-500"
+                    }`}
                   >
-                    Detay
-                  </button>
-                  <button
-                    onClick={() => openEdit(wf)}
-                    className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  >
-                    Düzenle
-                  </button>
-                  <button
-                    onClick={() => handleDelete(wf.id)}
-                    className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
-                  >
-                    Sil
-                  </button>
+                    {wf.isActive ? "Aktif" : "Silinmiş"}
+                  </p>
+
+                  {relatedStages.length > 0 ? (
+                    <ul className="text-sm mb-3">
+                      {relatedStages.map((s) => (
+                        <li key={s.id} className="flex flex-col mb-1">
+                          <span className="font-medium">{s.name}</span>
+                          <span className="text-gray-500 text-xs">
+                            {s.description}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-gray-400 text-sm mb-3">
+                      Henüz aşama eklenmemiş
+                    </p>
+                  )}
+
+                  {/* 🧭 Butonlar */}
+                  <div className="flex justify-center gap-2 text-sm mt-auto">
+                    <button
+                      onClick={() => navigate(`/sablonlar/${wf.id}`)}
+                      className="px-3 py-1 border rounded"
+                      style={{
+                        backgroundColor: colors.bg,
+                        color: colors.text,
+                      }}
+                    >
+                      Detay
+                    </button>
+                    <button
+                      onClick={() => openEdit(wf)}
+                      className="px-3 py-1 rounded"
+                      style={{
+                        backgroundColor: colors.bg,
+                        color: colors.text,
+                      }}
+                    >
+                      Düzenle
+                    </button>
+                    <button
+                      onClick={() => handleDelete(wf.id)}
+                      className="px-3 py-1 rounded"
+                      style={{
+                        backgroundColor: colors.bg,
+                        color: colors.text,
+                      }}
+                    >
+                      Sil
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p className="text-gray-500">Hiç şablon bulunamadı.</p>
           )}
         </div>
       )}
 
+      {/* ✏️ Düzenleme Modalı */}
       {editModal && (
         <>
           <div

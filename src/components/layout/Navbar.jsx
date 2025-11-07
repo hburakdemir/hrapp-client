@@ -86,7 +86,16 @@ const Navbar = ({ onMenuClick }) => {
           >
             <Palette size={20} />
           </button>
+ <div className="flex items-center justify-between ">
 
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+              style={{ color: colors.text }}
+            >
+              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
+          </div>
           <div className="relative">
             <button
               onClick={() => setShowUserMenu(!showUserMenu)}
@@ -177,18 +186,7 @@ const Navbar = ({ onMenuClick }) => {
             </button>
           </div>
 
-          <div className="flex items-center justify-between mb-4">
-            <p className="text-sm font-medium" style={{ color: colors.text }}>
-              Karanlık Mod
-            </p>
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 rounded-full hover:bg-gray-100 transition-colors"
-              style={{ color: colors.text }}
-            >
-              {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
-          </div>
+         
 
           <div className="mb-4">
             <p

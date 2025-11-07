@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { workflowAPI } from "../../api/modules/workflow";
+import { useTheme } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
 
 export default function CreateWorkflowButton() {
@@ -8,6 +9,7 @@ export default function CreateWorkflowButton() {
   const [workflowName, setWorkflowName] = useState("");
   const [stages, setStages] = useState([{ name: "" }]);
   const [loading, setLoading] = useState(false);
+  const {colors} = useTheme();
   const navigate = useNavigate();
 
   const addStage = () => setStages([...stages, { name: "" }]);
@@ -49,7 +51,11 @@ export default function CreateWorkflowButton() {
 
       <button
         onClick={() => setShowModal(true)}
-        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+        className=" px-4 py-2 rounded transition"
+        style={{
+          backgroundColor:colors.primary,
+          color:colors.bg
+        }}
       >
         Yeni Şablon Oluştur
       </button>
@@ -61,26 +67,40 @@ export default function CreateWorkflowButton() {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
 
           {/* modal */}
-          <div className="fixed top-1/2 left-1/2 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 bg-white p-6 rounded-lg shadow-xl z-50">
-            <h2 className="text-xl font-semibold mb-4">Yeni Şablon</h2>
+          <div className="fixed top-1/2 left-1/2 w-full max-w-lg -translate-x-1/2 -translate-y-1/2  p-6 rounded-lg shadow-xl z-50"
+          style={{
+            backgroundColor:colors.bg
+          }}>
+            <h2 className="text-xl font-semibold mb-4"
+            style={{
+              color:colors.text
+            }}
+            >
+              Yeni Şablon</h2>
 
-            <label className="block mb-1 text-sm font-medium">Şablon Adı</label>
+            <label className="block mb-1 text-sm font-medium"
+             style={{
+              color:colors.text
+            }}>Şablon Adı</label>
             <input
               value={workflowName}
               onChange={(e) => setWorkflowName(e.target.value)}
               placeholder="Örnek: İşe Alım Süreci"
-              className="border border-gray-300 rounded w-full px-3 py-2 mb-4 focus:ring focus:ring-blue-200 outline-none"
+              className="border rounded w-full px-3 py-2 mb-4 outline-none"
             />
 
             <div>
-              <label className="block mb-2 text-sm font-medium">Aşamalar</label>
+              <label className="block mb-2 text-sm font-medium"
+               style={{
+              color:colors.text
+            }}>Aşamalar</label>
               {stages.map((stage, idx) => (
                 <div key={idx} className="flex items-center gap-2 mb-2">
                   <input
                     value={stage.name}
                     onChange={(e) => handleStageChange(idx, e.target.value)}
                     placeholder={`Aşama ${idx + 1}`}
-                    className="border border-gray-300 rounded px-3 py-2 flex-1 focus:ring focus:ring-blue-200 outline-none"
+                    className="border  rounded px-3 py-2 flex-1  outline-none"
                   />
                   {stages.length > 1 && (
                     <button
@@ -95,7 +115,10 @@ export default function CreateWorkflowButton() {
 
               <button
                 onClick={addStage}
-                className="text-sm mt-2 text-blue-600 hover:text-blue-800"
+                className="text-sm mt-2"
+                 style={{
+              color:colors.primary
+            }}
               >
                 + Aşama Ekle
               </button>
@@ -104,14 +127,21 @@ export default function CreateWorkflowButton() {
             <div className="flex justify-end gap-3 mt-6">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-4 py-2 border rounded hover:bg-gray-100"
+                className="px-4 py-2 border rounded"
+                style={{
+                  backgroundColor:colors.bgsoft, color:colors.text
+                }}
               >
                 Vazgeç
               </button>
               <button
                 onClick={handleCreateWorkflow}
                 disabled={loading}
-                className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-blue-400"
+                className="px-4 py-2 rounded"
+                style={{
+                  backgroundColor:colors.primary,
+                  color:colors.bg
+                }}
               >
                 {loading ? "Oluşturuluyor..." : "Kaydet"}
               </button>
