@@ -47,14 +47,17 @@ export default function CreateWorkflowButton() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-6">Yeni Şablon Oluştur</h1>
+      <h1 className="text-2xl font-semibold mb-6"
+      style={{
+        color:colors.text
+      }}>Yeni Şablon Oluştur</h1>
 
       <button
         onClick={() => setShowModal(true)}
         className=" px-4 py-2 rounded transition"
         style={{
-          backgroundColor:colors.primary,
-          color:colors.bg
+          backgroundColor:colors.bgsoft,
+          color:colors.text
         }}
       >
         Yeni Şablon Oluştur

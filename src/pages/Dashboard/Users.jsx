@@ -164,8 +164,7 @@ export default function UsersPage() {
               style={{ backgroundColor: colors.bgsoft, color: "black" }}
             >
               <Plus size={20} />
-              <span className="hidden sm:inline">Yeni Kullanıcı</span>
-              <span className="sm:hidden">Ekle</span>
+              <span className="">Yeni Kullanıcı</span>
             </Button>
           </div>
         </div>
@@ -181,14 +180,17 @@ export default function UsersPage() {
           <>
             {/* Desktop Table View */}
             <div className="hidden lg:block">
-              <div className="rounded-xl shadow-sm overflow-hidden">
+              <div className="rounded-xl shadow-sm overflow-hidden"
+              style={{
+                backgroundColor:colors.bgsoft
+              }}>
                 <table className="min-w-full">
-                  <thead style={{ backgroundColor: colors.bgLight }}>
+                  <thead>
                     <tr>
                       <th
                         className="px-6 py-4 text-left text-sm font-medium"
                         style={{
-                          color: colors.primary,
+                          color: colors.text,
                           backgroundColor: colors.bgsoft,
                         }}
                       >
@@ -197,7 +199,7 @@ export default function UsersPage() {
                       <th
                         className="px-6 py-4 text-left text-sm font-medium"
                         style={{
-                          color: colors.primary,
+                          color: colors.text,
                           backgroundColor: colors.bgsoft,
                         }}
                       >
@@ -206,7 +208,7 @@ export default function UsersPage() {
                       <th
                         className="px-6 py-4 text-left text-sm font-medium"
                         style={{
-                          color: colors.primary,
+                          color: colors.text,
                           backgroundColor: colors.bgsoft,
                         }}
                       >
@@ -215,7 +217,7 @@ export default function UsersPage() {
                       <th
                         className="px-6 py-4 text-left text-sm font-medium"
                         style={{
-                          color: colors.primary,
+                          color: colors.text,
                           backgroundColor: colors.bgsoft,
                         }}
                       >
@@ -224,7 +226,7 @@ export default function UsersPage() {
                       <th
                         className="px-6 py-4 text-left text-sm font-medium"
                         style={{
-                          color: colors.primary,
+                          color: colors.text,
                           backgroundColor: colors.bgsoft,
                         }}
                       >
@@ -238,19 +240,25 @@ export default function UsersPage() {
                         key={user.id}
                         className="border-t transition-colors hover:bg-opacity-50"
                         style={{
-                          borderColor: colors.bgLight,
+                          borderColor: colors.bg,
                           color: colors.text,
                         }}
                       >
-                        <td className="px-6 py-4 text-sm">
+                        <td className="px-6 py-4 text-sm"
+                        style={{
+                          color:colors.text
+                        }}>
                           {user.name} {user.surname}
                         </td>
-                        <td className="px-6 py-4 text-sm">{user.email}</td>
+                        <td className="px-6 py-4 text-sm"
+                        style={{
+                          color:colors.text
+                        }}>{user.email}</td>
                         <td className="px-6 py-4 text-sm">
                           <span
-                            className="px-2 py-1 rounded-full text-xs font-medium"
+                            className="px-2 py-1 rounded-full text-xs font-medium bg-red-900"
                             style={{
-                              backgroundColor: `${colors.primary}20`,
+                              backgroundColor:colors.bg,
                               color: colors.primary,
                             }}
                           >
@@ -399,8 +407,8 @@ export default function UsersPage() {
                       type="text"
                       className="w-full border p-3 rounded-lg text-sm"
                       style={{
-                        borderColor: colors.bgLight,
-                        backgroundColor: colors.bgsoft,
+                        borderColor: colors.primary,
+                        backgroundColor: colors.bg,
                         color: colors.text,
                       }}
                       value={editingUser ? editingUser.name : newUser.name}
@@ -427,8 +435,8 @@ export default function UsersPage() {
                       type="text"
                       className="w-full border p-3 rounded-lg text-sm"
                       style={{
-                        borderColor: colors.bgLight,
-                        backgroundColor: colors.bgsoft,
+                        borderColor: colors.primary,
+                        backgroundColor: colors.bg,
                         color: colors.text,
                       }}
                       value={
@@ -457,8 +465,8 @@ export default function UsersPage() {
                       type="email"
                       className="w-full border p-3 rounded-lg text-sm"
                       style={{
-                        borderColor: colors.bgLight,
-                        backgroundColor: colors.bgsoft,
+                        borderColor: colors.primary,
+                        backgroundColor: colors.bg,
                         color: colors.text,
                       }}
                       value={editingUser ? editingUser.email : newUser.email}
@@ -487,9 +495,9 @@ export default function UsersPage() {
                     <input
                       type="password"
                       className="w-full border p-3 rounded-lg text-sm"
-                      style={{
-                        borderColor: colors.bgLight,
-                        backgroundColor: colors.bgsoft,
+                     style={{
+                        borderColor: colors.primary,
+                        backgroundColor: colors.bg,
                         color: colors.text,
                       }}
                       value={
@@ -512,7 +520,7 @@ export default function UsersPage() {
                   <div>
                     <label
                       className="block text-sm font-medium mb-2"
-                      style={{ color: colors.text }}
+                      style={{ color: colors.text}}
                     >
                       Rol
                     </label>
@@ -529,9 +537,9 @@ export default function UsersPage() {
                           : setNewUser({ ...newUser, role: e.target.value })
                       }
                       className="w-full border p-3 rounded-lg text-sm"
-                      style={{
-                        borderColor: colors.bgLight,
-                        backgroundColor: colors.bgsoft,
+                     style={{
+                        borderColor: colors.primary,
+                        backgroundColor: colors.bg,
                         color: colors.text,
                       }}
                       required
@@ -552,7 +560,7 @@ export default function UsersPage() {
                       }}
                       className="flex-1 px-4 py-3 rounded-lg text-sm font-medium transition-colors"
                       style={{
-                        backgroundColor: colors.bgLight,
+                        backgroundColor: colors.bgsoft,
                         color: colors.text,
                       }}
                     >

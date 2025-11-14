@@ -49,10 +49,10 @@ export const ThemeProvider = ({ children }) => {
   const themes = {
     theme1: {
       light: {
-        primary: '#222831',
-        bgsoft: '#fff',
-        bg: '#CBCBCB',
-        text: '#222831',
+        primary: '#2F5755',
+        bgsoft: '#5A9690',
+        bg: '#E0D9D9',
+        text: '#432323',
         text2:'#222831'
       },
       dark: {
@@ -60,38 +60,38 @@ export const ThemeProvider = ({ children }) => {
         bgsoft: '#393E46',
         bg: '#222831',
         text: '#CBCBCB',
-        text2: '#CBCBCB',
+        text2: '#DFD0B8',
       },
     },
     theme2: {
       light: {
-        primary: '#2F5755',
-        bgsoft: '#5A9690',
+        primary: '#0C2B4E',
+        bgsoft: '#EFE9E3',
         bg: '#F4F4F4',
-        text: '#432323',
+        text: '#1A3D64',
         text2: '#432323',
       },
       dark: {
         primary: '#F4EEE0',
-        bgsoft: '#6D5D6E',
-        bg: '#393646',
+        bgsoft: '#44444E',
+        bg: '#37353E',
         text: '#F4F4F4',
         text2: '#F4F4F4',
       },
     },
     theme3: {
       light: {
-        primary: '#B2A59B',
-        bgsoft: '#A3485A',
-        bg: '#FFFFFF',
-        text: '#111827',
+        primary: '#154D71',
+        bgsoft: '#FFF2EB',
+        bg: '#E9E3DF',
+        text: '#212121',
         text2: '#F4F4F4',
       },
       dark: {
-        primary: '#F4EEE0',
-        bgsoft: '#9B4444',
-        bg: '#31363F',
-        text: '#F4F4F4',
+        primary: '#5C3E94',
+        bgsoft: '#303030',
+        bg: '#212121',
+        text: '#CBCBCB',
         text2: '#F4F4F4',
       },
     },
