@@ -176,7 +176,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                   ? `${colors.primary}08` 
                   : 'transparent',
               color: isActive ? colors.primary : colors.text,
-              borderLeft: isActive ? `3px solid ${colors.primary}` : '3px solid transparent'
+              borderLeft: isActive ? `3px solid ${colors.text}` : '3px solid transparent'
             }}
           >
             <div className="flex items-center space-x-3">
@@ -194,7 +194,7 @@ const Sidebar = ({ isOpen, onClose }) => {
               ml-4 pl-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out
               ${isOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
             `}
-            style={{ borderLeft: `2px solid ${colors.bgLight}` }}
+            style={{ borderLeft: `2px solid ${colors.primary}` }}
           >
             {item.children.map((child, index) => {
               const isChildActive = isItemActive(child.path);
@@ -219,7 +219,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                       : childHovered 
                         ? `${colors.primary}10` 
                         : 'transparent',
-                    color: isChildActive ? colors.primary : colors.textSoft,
+                    color: isChildActive ? colors.primary : colors.text,
                   }}
                 >
                   <div className="flex items-center space-x-3">
@@ -229,7 +229,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                       <div 
                         className="w-2 h-2 rounded-full"
                         style={{ 
-                          backgroundColor: isChildActive ? colors.primary : colors.textSoft 
+                          backgroundColor: isChildActive ? colors.primary : colors.text 
                         }}
                       />
                     )}
@@ -264,18 +264,17 @@ const Sidebar = ({ isOpen, onClose }) => {
         style={{
           backgroundColor: colors.bg,
           fontFamily: `var(--font-family, ${font})`,
-          borderRight: `1px solid ${colors.bgLight}`
         }}
       >
         <div 
           className="h-16 flex items-center px-6 border-b relative"
-          style={{ borderColor: colors.bgLight }}
+          style={{ borderColor: colors.text }}
         >
           <div
-            className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-white shadow-lg transform transition-transform hover:scale-110"
+            className="w-8 h-8 rounded-lg flex items-center justify-center font-bold shadow-lg transform transition-transform hover:scale-110"
             style={{ 
-              backgroundColor: colors.primary,
-              backgroundImage: `linear-gradient(135deg, ${colors.primary}, ${colors.primary}dd)`
+              color:colors.text,
+              backgroundImage: `linear-gradient(135deg, ${colors.bgsoft}, ${colors.primary}dd)`
             }}
           >
             L

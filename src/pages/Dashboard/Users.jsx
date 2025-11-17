@@ -84,7 +84,7 @@ export default function UsersPage() {
   return (
     <Layout>
       <div
-        className="p-4 lg:p-6 min-h-screen relative"
+        className="p-6 lg:p-12 min-h-screen relative"
         style={{ backgroundColor: colors.bg }}
       >
         {/* Header */}
@@ -97,7 +97,7 @@ export default function UsersPage() {
           </h1>
           <p
             className="text-sm lg:text-base"
-            style={{ color: colors.textMuted }}
+            style={{ color: colors.text }}
           >
             Sistem kullanıcılarını yönetin
           </p>
@@ -256,7 +256,7 @@ export default function UsersPage() {
                         }}>{user.email}</td>
                         <td className="px-6 py-4 text-sm">
                           <span
-                            className="px-2 py-1 rounded-full text-xs font-medium bg-red-900"
+                            className="px-2 py-1 rounded-full text-sm font-medium bg-red-900"
                             style={{
                               backgroundColor:colors.bg,
                               color: colors.primary,
@@ -488,9 +488,7 @@ export default function UsersPage() {
                       style={{ color: colors.text }}
                     >
                       Şifre{" "}
-                      {editingUser && (
-                        <span className="text-xs">(boş bırakılabilir)</span>
-                      )}
+                      
                     </label>
                     <input
                       type="password"

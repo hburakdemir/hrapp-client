@@ -4,10 +4,10 @@ import CreateWorkflowButton from "../../components/workflow/CreateWorkflowButton
 import { useTheme } from "../../context/ThemeContext";
 
 export default function NewWorkflow() {
-  const {colors,darkMode} = useTheme();
+  const {colors} = useTheme();
   return (
     <Layout>
-      <div className="p-6 space-y- min-h-screen"
+      <div className="p-6 lg:p-12 min-h-screen"
       style={{
         backgroundColor:colors.bg
       }}>

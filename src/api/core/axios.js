@@ -19,25 +19,41 @@ api.interceptors.request.use(
 
 api.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
+    const originalRequest = error.config;
     const isAuthEndpoint =
-      error.config?.url?.includes("/auth/login") ||
-      error.config?.url?.includes("/auth/register");
-    
+      originalRequest.url?.includes("/auth/login") ||
+      originalRequest.url?.includes("/auth/register") ||
+      originalRequest.url?.includes("/auth/refresh");
+      
+
     if (
-      (error.response?.status === 401 || error.response?.status === 403) &&
-      !isAuthEndpoint
+      error.response?.status === 401 &&
+      !isAuthEndpoint &&
+      !originalRequest._retry
     ) {
-      const message =
-        error.response?.data?.message ||
-        "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.";
-      toast.error(message);
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      window.location.href = "/login";
+      originalRequest._retry = true;
+
+      try {
+        const res = await api.post("/auth/refresh");
+        const { accessToken } = res.data.data;
+
+        localStorage.setItem("token", accessToken);
+        originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        toast.error("Oturumunuz sona erdi. Lütfen tekrar giriş yapın.");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
     }
+
     return Promise.reject(error);
   }
 );
+
 
 export default api;

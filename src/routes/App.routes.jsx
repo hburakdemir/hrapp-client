@@ -5,7 +5,7 @@ import Register from "../pages/auth/Register";
 import Contact from "../pages/contact/Contact";
 import Unauthorized from "../pages/Unauthorized";
 import Dashboard from "../pages/Home/Dashboard";
-import Applicants from "../pages/Applicants";
+import Applicants from "../pages/Dashboard/Applicants";
 import UsersPage from "../pages/Dashboard/Users";
 import NewWorkflow from "../pages/Dashboard/NewWorkflow";
 import Profile from "../pages/profile/Profile";

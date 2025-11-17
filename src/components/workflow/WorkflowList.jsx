@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { workflowAPI } from "../../api/modules/workflow";
 import { stageAPI } from "../../api/modules/stage";
-import { adminAPI } from "../../api/modules/admin";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
+import { userAPI } from "../../api/modules/user";
 
 export default function WorkflowList() {
   const [workflows, setWorkflows] = useState([]);
@@ -51,12 +51,13 @@ export default function WorkflowList() {
 
   const fetchCandidates = async () => {
     try {
-      const res = await adminAPI.getUsers({ role: "CANDIDATE" });
+      const res = await userAPI.getAllCandidates({ });
 
-      const candidateList = Array.isArray(res.data?.data?.users)
-        ? res.data.data.users.filter((u) => u.role === "CANDIDATE")
-        : [];
+      const candidateList = res.data.data;
+      // console.log("123",res.data);
+      // console.log("456",res.data.data);
       setCandidates(candidateList);
+      console.log(res.data.data);
     } catch (err) {
       console.error(err);
       toast.error("Adaylar alınamadı.");
@@ -289,11 +290,11 @@ export default function WorkflowList() {
               }}
               className="border border-gray-300 rounded w-full px-3 py-2 mb-4"
             >
-              <option value="">Seçiniz</option>
+              <option value="" className="text-black">Seçiniz</option>
               {Array.isArray(candidates) && candidates.length > 0 ? (
                 candidates.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.name} {c.surname}
+                    {c.user.name} {c.user.surname}
                   </option>
                 ))
               ) : (

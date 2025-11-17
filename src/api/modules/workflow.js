@@ -9,5 +9,6 @@ export const workflowAPI = {
   
   // workflow atama bu
   assignToCandidate: (data) => api.post("/workflows/assign", data),
+  getAllAssignments: () => api.get('/workflows/getAssign'),
   
 };
