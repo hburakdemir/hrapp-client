@@ -7,12 +7,16 @@ function WorkflowAssignmentsList() {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const { colors } = useTheme();
-
+  
   const fetchAssignments = async () => {
     try {
       const res = await workflowAPI.getAllAssignments();
-      if (res.data?.success) {
+      // const assignmentsName = res.data.data;
+      // console.log("11",assignmentsName[0].candidate.user.name)
+      if (res.data.success) {
         setAssignments(res.data.data);
+        // console.log(res.data.data)
+
       }
     } catch (err) {
       console.error("Hata:", err);
@@ -23,6 +27,7 @@ function WorkflowAssignmentsList() {
 
   useEffect(() => {
     fetchAssignments();
+    
   }, []);
   if (loading) return <p>Yükleniyor...</p>;
 
@@ -65,6 +70,15 @@ function WorkflowAssignmentsList() {
                     >
                       Aday
                     </th>
+                      <th
+                        className="px-6 py-4 text-center  font-medium"
+                        style={{
+                          color: colors.text,
+                          backgroundColor: colors.bgsoft,
+                        }}
+                      >
+                        Email
+                      </th>
                     <th
                       className="px-6 py-4 text-center  font-medium"
                       style={{
@@ -109,6 +123,9 @@ function WorkflowAssignmentsList() {
                       <td className="px-6 py-4 text-center ">
                         {item.candidate?.user?.name}{" "}
                         {item.candidate?.user?.surname}
+                      </td>
+                      <td className="px-6 py-4 text-center ">
+                        {item.candidate?.user?.email}
                       </td>
 
                       {/* wf */}
