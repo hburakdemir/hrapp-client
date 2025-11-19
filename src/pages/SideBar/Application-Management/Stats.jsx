@@ -1,9 +1,9 @@
 // src/pages/Dashboard.jsx
 import { useEffect, useMemo, useState } from "react";
-import { useTheme } from "../../context/ThemeContext";
-import Layout from "../../components/layout/Layout";
-import { adminAPI } from "../../api/modules/admin";
-import { userAPI } from "../../api/modules/user";
+import { useTheme } from "../../../context/ThemeContext";
+import Layout from "../../../components/layout/Layout";
+import { adminAPI } from "../../../api/modules/admin";
+import { userAPI } from "../../../api/modules/user";
 import toast from "react-hot-toast";
 import {
   BarChart,
@@ -113,10 +113,10 @@ const Dashboard = () => {
 
     // userAPI'den gelen candidates count'u UNKNOWN olarak ekle
     const roles = [
-      { name: "ADMIN", value: roleCounts["ADMIN"] || 0 },
-      { name: "HR", value: roleCounts["HR"] || 0 },
-      { name: "CANDIDATE", value: roleCounts["CANDIDATE"] || 0 },
-      { name: "UNKNOWN", value: candidatesCount } // userAPI'den gelen sayı
+      { name: "Admin", value: roleCounts["ADMIN"] || 0 },
+      { name: "İnsan Kaynakları", value: roleCounts["HR"] || 0 },
+      { name: "Yarım Profil", value: roleCounts["CANDIDATE"] || 0 },
+      { name: "Aday", value: candidatesCount } // userAPI'den gelen sayı
     ];
     
     return roles;
@@ -191,7 +191,7 @@ const Dashboard = () => {
               className="text-lg font-semibold mb-4"
               style={{ color: colors.text }}
             >
-              Rol Dağılımı
+              Üye Dağılımı
             </h3>
             <div style={{ width: "100%", height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">

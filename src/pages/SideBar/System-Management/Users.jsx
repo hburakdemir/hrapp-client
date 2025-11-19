@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
-import { adminAPI } from "../../api/modules/admin";
-import Layout from "../../components/layout/Layout";
-import { useTheme } from "../../context/ThemeContext";
-import { MoreVertical, Plus, Edit, Trash2 } from "lucide-react";
-import Button from "../../components/ui/Button";
+import { adminAPI } from "../../../api/modules/admin";
+import Layout from "../../../components/layout/Layout";
+import { useTheme } from "../../../context/ThemeContext";
+import { Plus, Edit, Trash2 } from "lucide-react";
+import Button from "../../../components/ui/Button";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);

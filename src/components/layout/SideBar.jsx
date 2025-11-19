@@ -1,13 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   X, ChevronDown, ChevronRight, Home, FileText, Users, Mail, 
-  Briefcase, Settings, Calendar, BarChart3, UserCheck, Shield,
-  Plus, FolderOpen, CheckSquare
+  Briefcase, Settings, BarChart3, Plus, FolderOpen, CheckSquare,
+  Shield, ClipboardList, User
 } from 'lucide-react';
 
 const Sidebar = ({ isOpen, onClose }) => {
+  const { user } = useAuth();
+  console.log("sidebar",user);
+  const userRole = user?.role; 
   const { colors, font } = useTheme();
   const location = useLocation();
   const [openMenus, setOpenMenus] = useState({});
@@ -27,6 +31,10 @@ const Sidebar = ({ isOpen, onClose }) => {
     if (['/users', '/settings', '/permissions'].includes(currentPath)) {
       setOpenMenus(prev => ({ ...prev, system: true }));
     }
+
+    if (['/my-applications', '/profile'].includes(currentPath)) {
+      setOpenMenus(prev => ({ ...prev, candidate: true }));
+    }
   }, [location.pathname]);
 
   const toggleMenu = (menuKey) => {
@@ -38,11 +46,12 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const menuItems = [
     {
-      key: 'dashboard',
-      label: 'Dashboard',
+      key: 'website',
+      label: 'Siteye Dön',
       icon: Home,
       path: '/',
-      type: 'single'
+      type: 'single',
+      roles: ['ADMIN', 'HR', 'CANDIDATE']
     },
     {
       key: 'applications',
@@ -50,11 +59,11 @@ const Sidebar = ({ isOpen, onClose }) => {
       icon: FileText,
       type: 'group',
       badge: '4',
+      roles: ['ADMIN', 'HR'],
       children: [
-        { label: 'Başvuru Formlarım', path: '/my-forms', icon: FolderOpen },
-        { label: 'Başvuru Formları', path: '/forms', icon: FileText },
-        { label: 'Yeni Form', path: '/yeni-sablon', icon: Plus },
-        { label: 'Başvuranlar', path: '/applicants', icon: Users, badge: '12' }
+        { label: 'İstatistikler', path: '/stats', icon: BarChart3, roles: ['ADMIN'] },
+        { label: 'Yeni Form', path: '/new-form', icon: Plus, roles: ['ADMIN', 'HR'] },
+        { label: 'Başvuranlar', path: '/applicants', icon: Users, badge: '12', roles: ['ADMIN', 'HR'] }
       ]
     },
     {
@@ -63,11 +72,22 @@ const Sidebar = ({ isOpen, onClose }) => {
       icon: Briefcase,
       type: 'group',
       badge: '3',
+      roles: ['ADMIN', 'HR'],
       children: [
-        { label: 'Şablonlar', path: '/workflows', icon: Calendar },
-        { label: 'Görevler', path: '/tasks', icon: CheckSquare, badge: '5' },
-        { label: 'Adaylar', path: '/candidates', icon: UserCheck },
-        { label: 'Raporlar', path: '/reports', icon: BarChart3 }
+        { label: 'Başvuru Formlarım', path: '/my-forms', icon: FolderOpen, roles: ['ADMIN', 'HR'] },
+        { label: 'Tüm Formlar', path: '/all-forms', icon: ClipboardList, roles: ['ADMIN'] },
+        { label: 'Görevler', path: '/tasks', icon: CheckSquare, badge: '5', roles: ['ADMIN'] },
+      ]
+    },
+    {
+      key: 'candidate',
+      label: 'Başvurularım',
+      icon: ClipboardList,
+      type: 'group',
+      roles: ['ADMIN'],
+      children: [
+        { label: 'Başvurularım', path: '/my-applications', icon: ClipboardList, roles: ['ADMIN'] },
+        { label: 'Profil', path: '/profile', icon: User, roles: ['CANDIDATE'] }
       ]
     },
     {
@@ -75,10 +95,10 @@ const Sidebar = ({ isOpen, onClose }) => {
       label: 'Sistem Yönetimi',
       icon: Settings,
       type: 'group',
+      roles: ['ADMIN'],
       children: [
-        { label: 'Kullanıcılar', path: '/users', icon: Users },
-        { label: 'Ayarlar', path: '/settings', icon: Settings },
-        { label: 'Yetkiler', path: '/permissions', icon: Shield }
+        { label: 'Kullanıcılar', path: '/users', icon: Users, roles: ['ADMIN'] },
+        { label: 'Yetkiler', path: '/permissions', icon: Shield, roles: ['ADMIN'] },
       ]
     },
     {
@@ -86,9 +106,28 @@ const Sidebar = ({ isOpen, onClose }) => {
       label: 'İletişim',
       icon: Mail,
       path: '/contact',
-      type: 'single'
+      type: 'single',
+      roles: ['ADMIN', 'HR', 'CANDIDATE']
     }
   ];
+
+  const hasAccess = (roles) => {
+    if (!roles || roles.length === 0) return true;
+    return roles.includes(userRole);
+  };
+
+  const filterMenuItems = (items) => {
+    return items.filter(item => {
+      if (!hasAccess(item.roles)) return false;
+      
+      if (item.type === 'group' && item.children) {
+        item.children = item.children.filter(child => hasAccess(child.roles));
+        return item.children.length > 0;
+      }
+      
+      return true;
+    });
+  };
 
   const isItemActive = (path) => {
     return location.pathname === path;
@@ -245,6 +284,8 @@ const Sidebar = ({ isOpen, onClose }) => {
     }
   };
 
+  const filteredMenuItems = filterMenuItems(menuItems);
+
   return (
     <>
       {isOpen && (
@@ -293,11 +334,8 @@ const Sidebar = ({ isOpen, onClose }) => {
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300">
-          {menuItems.map(renderMenuItem)}
+          {filteredMenuItems.map(renderMenuItem)}
         </nav>
-
-
-        
       </aside>
     </>
   );

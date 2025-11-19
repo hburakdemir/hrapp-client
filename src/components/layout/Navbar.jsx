@@ -4,17 +4,12 @@ import { Menu, User, LogOut, Sun, Moon, Palette, Type, X } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 
 const Navbar = ({ onMenuClick }) => {
-  const {
-    colors,
-    setTheme,
-    darkMode,
-    setDarkMode,
-    font,
-    setFont,
-    themes,
-  } = useTheme();
+  const { colors, setTheme, darkMode, setDarkMode, font, setFont, themes } =
+    useTheme();
 
   const { user, logout } = useAuth();
+  console.log("navbar",user.role);
+  console.log("navbar1",user);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showThemePanel, setShowThemePanel] = useState(false);
 
@@ -23,6 +18,7 @@ const Navbar = ({ onMenuClick }) => {
     segoe: "Segoe UI, sans-serif",
     times: "Times New Roman, serif",
     poppins: "Poppins, sans-serif",
+    asd:"Noto Sans Syriac, sans-serif"
   };
 
   const themePanelRef = useRef(null);
@@ -86,8 +82,7 @@ const Navbar = ({ onMenuClick }) => {
           >
             <Palette size={20} />
           </button>
- <div className="flex items-center justify-between ">
-
+          <div className="flex items-center justify-between ">
             <button
               onClick={() => setDarkMode(!darkMode)}
               className="p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -166,7 +161,7 @@ const Navbar = ({ onMenuClick }) => {
           ref={themePanelRef}
           className="absolute top-14 right-16 w-64 p-4 rounded-2xl shadow-xl border backdrop-blur-md transition-all duration-300 z-40"
           style={{
-            backgroundColor:colors.bg,
+            backgroundColor: colors.bg,
             borderColor: colors.bgsoft,
             fontFamily: fonts[font],
           }}
@@ -186,8 +181,6 @@ const Navbar = ({ onMenuClick }) => {
             </button>
           </div>
 
-         
-
           <div className="mb-4">
             <p
               className="text-sm mb-2 font-medium"
@@ -197,41 +190,40 @@ const Navbar = ({ onMenuClick }) => {
             </p>
             <div className="flex flex-col gap-2">
               {Object.keys(themes).map((key) => (
-  <button
-    key={key}
-    onClick={() => setTheme(key)} 
-    className="flex items-center justify-between p-2 rounded-lg border transition-all hover:scale-[1.02] active:scale-95"
-    style={{ borderColor: colors.bgsoft }}
-  >
-    <div className="flex gap-2">
-      <span
-        className="w-5 h-5 rounded-full"
-        style={{
-          backgroundColor: themes[key].light.bgsoft, 
-        }}
-      />
-      <span
-        className="w-5 h-5 rounded-full"
-        style={{
-          backgroundColor: themes[key].light.primary, 
-        }}
-      />
-      <span
-        className="w-5 h-5 rounded-full"
-        style={{
-          backgroundColor: themes[key].dark.bgsoft, 
-        }}
-      />
-      <span
-        className="w-5 h-5 rounded-full"
-        style={{
-          backgroundColor: themes[key].dark.primary, 
-        }}
-      />
-    </div>
-  </button>
-))}
-
+                <button
+                  key={key}
+                  onClick={() => setTheme(key)}
+                  className="flex items-center justify-between p-2 rounded-lg border transition-all hover:scale-[1.02] active:scale-95"
+                  style={{ borderColor: colors.bgsoft }}
+                >
+                  <div className="flex gap-2">
+                    <span
+                      className="w-5 h-5 rounded-full"
+                      style={{
+                        backgroundColor: themes[key].light.bgsoft,
+                      }}
+                    />
+                    <span
+                      className="w-5 h-5 rounded-full"
+                      style={{
+                        backgroundColor: themes[key].light.primary,
+                      }}
+                    />
+                    <span
+                      className="w-5 h-5 rounded-full"
+                      style={{
+                        backgroundColor: themes[key].dark.bgsoft,
+                      }}
+                    />
+                    <span
+                      className="w-5 h-5 rounded-full"
+                      style={{
+                        backgroundColor: themes[key].dark.primary,
+                      }}
+                    />
+                  </div>
+                </button>
+              ))}
             </div>
           </div>
 

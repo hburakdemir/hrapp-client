@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { workflowAPI } from "../../api/modules/workflow";
-import Layout from "../../components/layout/Layout";
-import { useTheme } from "../../context/ThemeContext";
+import { workflowAPI } from "../../../api/modules/workflow";
+import Layout from "../../../components/layout/Layout";
+import { useTheme } from "../../../context/ThemeContext";
 
 function WorkflowAssignmentsList() {
   const [assignments, setAssignments] = useState([]);

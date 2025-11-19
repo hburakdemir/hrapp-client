@@ -1,138 +1,103 @@
-import React, { createContext, useState, useEffect, useContext, useCallback } from "react";
-import api from "../api/core/axios";
+// context/AuthContext.jsx
+import React, { createContext, useState, useEffect, useContext, useCallback, useMemo } from "react";
 import { authAPI } from "../api/modules/auth";
+import api from "../api/core/axios";
+import {jwtDecode} from "jwt-decode";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("user"));
-    } catch {
-      return null;
-    }
-  });
-  
   const [token, setToken] = useState(() => localStorage.getItem("token"));
 
-  // Logout fonksiyonu
+  // logout fonksiyonu
   const logout = useCallback(async () => {
     try {
-      // Backend'e logout isteği gönder (cookie'yi temizlemek için)
-      await authAPI.logout();
-    } catch (error) {
-      console.error("Logout hatası:", error);
+      await authAPI.logout(); // backend logout (cookie temizleme)
+    } catch (err) {
+      console.error("Logout error:", err);
     } finally {
       setToken(null);
-      setUser(null);
       localStorage.removeItem("token");
-      localStorage.removeItem("user");
       window.location.href = "/login";
     }
   }, []);
 
-  // Token yenileme - refresh token cookie'den otomatik gelecek
+  // token refresh
   const refreshAccessToken = useCallback(async () => {
     try {
-      const response = await authAPI.refresh();
-      
-      const newAccessToken = response.data.data.accessToken;
-      setToken(newAccessToken);
-      localStorage.setItem("token", newAccessToken);
-      
-      return newAccessToken;
-    } catch (error) {
-      console.error("Token yenileme hatası:", error);
+      const res = await authAPI.refresh(); // backend refresh
+      const newToken = res.data.data.accessToken;
+      setToken(newToken);
+      localStorage.setItem("token", newToken);
+      return newToken;
+    } catch (err) {
+      console.error("Token refresh error:", err);
       logout();
       return null;
     }
   }, [logout]);
 
-  // Her 14 dakikada bir otomatik token yenile
+  // axios interceptor
   useEffect(() => {
-    if (!token) return;
+    const interceptor = api.interceptors.response.use(
+      res => res,
+      async err => {
+        const originalReq = err.config;
+        if (err.response?.status === 401 && !originalReq._retry) {
+          originalReq._retry = true;
+          const isAuthEndpoint = ["/auth/login", "/auth/register", "/auth/refresh"].some(path =>
+            originalReq.url?.includes(path)
+          );
+          if (isAuthEndpoint) return Promise.reject(err);
 
-    // İlk yükleme sonrası 14 dakika bekle
-    const interval = setInterval(() => {
-      refreshAccessToken();
-    }, 14 * 60 * 1000); // 14 dakika
-
-    return () => clearInterval(interval);
-  }, [token, refreshAccessToken]);
-
-  // Axios interceptor - 401 hatalarında token yenile
-  useEffect(() => {
-    const responseInterceptor = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        const originalRequest = error.config;
-
-        // 401 hatası ve daha önce denenmemiş
-        if (error.response?.status === 401 && !originalRequest._retry) {
-          originalRequest._retry = true;
-
-          // Auth endpoint'lerinde token yenileme yapma
-          const isAuthEndpoint = 
-            originalRequest.url?.includes("/auth/login") ||
-            originalRequest.url?.includes("/auth/register") ||
-            originalRequest.url?.includes("/auth/refresh");
-
-          if (isAuthEndpoint) {
-            return Promise.reject(error);
-          }
-
-          // Token'ı yenile
           const newToken = await refreshAccessToken();
-
           if (newToken) {
-            // Yeni token ile isteği tekrar yap
-            originalRequest.headers.Authorization = `Bearer ${newToken}`;
-            return api(originalRequest);
+            originalReq.headers.Authorization = `Bearer ${newToken}`;
+            return api(originalReq);
           }
         }
 
-        // Diğer 401/403 hataları
-        if (error.response?.status === 401 || error.response?.status === 403) {
-          const isAuthEndpoint =
-            error.config?.url?.includes("/auth/login") ||
-            error.config?.url?.includes("/auth/register");
-          
-          if (!isAuthEndpoint) {
-            logout();
-          }
+        if ([401, 403].includes(err.response?.status)) {
+          const isAuthEndpoint = ["/auth/login", "/auth/register"].some(path =>
+            err.config?.url?.includes(path)
+          );
+          if (!isAuthEndpoint) logout();
         }
 
-        return Promise.reject(error);
+        return Promise.reject(err);
       }
     );
 
-    return () => {
-      api.interceptors.response.eject(responseInterceptor);
-    };
+    return () => api.interceptors.response.eject(interceptor);
   }, [refreshAccessToken, logout]);
 
-  const login = ({ accessToken, user }) => {
-    // Artık sadece accessToken ve user alıyoruz
-    // refreshToken cookie'de
+  // login fonksiyonu
+  const login = ({ accessToken }) => {
     setToken(accessToken);
-    setUser(user);
     localStorage.setItem("token", accessToken);
-    localStorage.setItem("user", JSON.stringify(user));
   };
 
+  // decoded user bilgisi
+  const user = useMemo(() => {
+    if (!token) return null;
+    try {
+      return jwtDecode(token); // { userId, role, iat, exp, name, surname ...}
+    } catch {
+      return null;
+    }
+  }, [token]);
+
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ token, user, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook
+// custom hook
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 };
 

@@ -1,0 +1,19 @@
+import React from 'react'
+import Layout from '../../../components/layout/Layout'
+import { useTheme } from '../../../context/ThemeContext';
+
+
+const Permissions = () => {
+  const {colors} = useTheme();
+  return (
+    <Layout>
+    <div className='min-h-screen' 
+    style={{backgroundColor:colors.bg}}>
+      <p 
+      style={{color:colors.text}}>perms page</p>
+    </div>
+    </Layout>
+  )
+}
+
+export default Permissions

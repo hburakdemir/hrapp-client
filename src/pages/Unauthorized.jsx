@@ -3,7 +3,7 @@ import React from 'react'
 const Unauthorized = () => {
   return (
     <div>
-      <p> yetkisiz erişim kardeş</p>
+      <p> yetkisiz erişim PAGE</p>
     </div>
   )
 }

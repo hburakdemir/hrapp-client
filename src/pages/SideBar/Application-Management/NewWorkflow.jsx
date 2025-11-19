@@ -1,7 +1,7 @@
-import Layout from "../../components/layout/Layout";
-import WorkflowList from "../../components/workflow/WorkflowList";
-import CreateWorkflowButton from "../../components/workflow/CreateWorkflowButton";
-import { useTheme } from "../../context/ThemeContext";
+import Layout from "../../../components/layout/Layout";
+import WorkflowList from "../../../components/workflow/WorkflowList";
+import CreateWorkflowButton from "../../../components/workflow/CreateWorkflowButton";
+import { useTheme } from "../../../context/ThemeContext";
 
 export default function NewWorkflow() {
   const {colors} = useTheme();

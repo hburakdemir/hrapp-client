@@ -7,6 +7,8 @@ import { Mail, Lock, LockOpen } from "lucide-react";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import toast from "react-hot-toast";
+import { jwtDecode } from "jwt-decode";
+
 
 
 const Login = () => {
@@ -20,29 +22,26 @@ const Login = () => {
   const handleChange = (e) =>
     setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
   e.preventDefault();
   setLoading(true);
   try {
     const res = await authAPI.login(form);
-    const { accessToken, user } = res.data.data;
+    const { accessToken } = res.data.data;
 
-    // login fonksiyonunu çalıştır
-    login({ accessToken, user }); // refreshToken cookie'de
+    login({ accessToken }); // artık user bilgisi decode ile geliyor
 
-    // Candidate kullanıcıysa profil kontrolü yap
-    if (user.role === "CANDIDATE") {
-      // Backend’de candidate profili eksik mi kontrol eden endpoint
-      const profileRes = await authAPI.getProfileStauts(); // GET /api/users/profile-status
-      const { profileComplete } = profileRes.data.data;
-
-      if (!profileComplete) {
-        navigate("/profile"); // profil eksikse yönlendir
+    // Rol bazlı yönlendirme
+    const decoded = jwtDecode(accessToken);
+    if (decoded.role === "CANDIDATE") {
+      const profileRes = await authAPI.getProfileStauts();
+      if (!profileRes.data.data.profileComplete) {
+        navigate("/profile");
       } else {
-        navigate("/"); // profil tamamsa anasayfa
+        navigate("/");
       }
     } else {
-      navigate("/"); // HR veya Admin ise direkt anasayfa
+      navigate("/");
     }
 
   } catch (err) {
@@ -51,6 +50,7 @@ const Login = () => {
     setLoading(false);
   }
 };
+
 
   return (
     <div
