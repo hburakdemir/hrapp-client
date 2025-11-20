@@ -16,6 +16,7 @@ import NewWorkflow from "../pages/SideBar/Application-Management/NewWorkflow";
 import MyForms from "../pages/SideBar/Hiring-Management/MyForms";
 import AllForms from "../pages/SideBar/Hiring-Management/AllForms";
 import Tasks from "../pages/SideBar/Hiring-Management/Tasks";
+import WfDetail from "../pages/SideBar/Hiring-Management/WfDetail";
 
 //sidebar-systmmngmnt
 import Users from "../pages/SideBar/System-Management/Users";
@@ -97,6 +98,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={['ADMIN']}>
             <Tasks />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sablon-detay/:id"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <WfDetail />
           </ProtectedRoute>
         }
       />

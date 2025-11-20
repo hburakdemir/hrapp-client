@@ -201,7 +201,7 @@ export default function WorkflowList() {
 
                   <div className="flex justify-center gap-2 text-sm mt-auto">
                     <button
-                      onClick={() => navigate(`/sablonlar/${wf.id}`)}
+                      onClick={() => navigate(`/sablon-detay/${wf.id}`)}
                       className="px-3 py-1 border rounded"
                       style={{ backgroundColor: colors.bg, color: colors.text }}
                     >
