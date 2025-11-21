@@ -8,8 +8,8 @@ const Navbar = ({ onMenuClick }) => {
     useTheme();
 
   const { user, logout } = useAuth();
-  console.log("navbar",user.role);
-  console.log("navbar1",user);
+  // console.log("navbar",user.role);
+  // console.log("navbar1",user);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showThemePanel, setShowThemePanel] = useState(false);
 

@@ -98,13 +98,13 @@ export default function WorkflowList() {
 
   const handleUpdate = async () => {
     try {
-      await workflowAPI.update(editModal.id, { name: editName });
-      toast.success("Şablon güncellendi!");
+     const res = await workflowAPI.update(editModal.id, { name: editName });
+      toast.success(res.data?.message);
       setEditModal(null);
       fetchWorkflows();
     } catch (err) {
       console.error(err);
-      toast.error("Güncelleme başarısız oldu.");
+      toast.error(err.response?.data?.message);
     }
   };
 
@@ -121,16 +121,18 @@ export default function WorkflowList() {
     }
 
     try {
-      await workflowAPI.assignToCandidate({
+   const res = await workflowAPI.assignToCandidate({
         workflowId: assignModal.id,
         candidateId: selectedCandidate.id,
         assignedByUserId: 1,
       });
-      toast.success("Workflow adaya atandı!");
+      toast.success(res.data?.message);
       setAssignModal(null);
     } catch (err) {
       console.error(err);
-      toast.error("Atama başarısız oldu.");
+      const errorMsg = 
+    err.response?.data?.message;
+    toast.error(errorMsg);
     }
   };
 
@@ -187,6 +189,7 @@ export default function WorkflowList() {
                       {relatedStages.map((s) => (
                         <li key={s.id} className="flex flex-col mb-1">
                           <span className="font-medium">{s.name}</span>
+                          <span className="font-medium">{s.id}</span>
                           <span className="text-gray-500 text-xs">
                             {s.description}
                           </span>

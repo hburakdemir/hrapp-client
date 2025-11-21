@@ -10,7 +10,7 @@ import {
 
 const Sidebar = ({ isOpen, onClose }) => {
   const { user } = useAuth();
-  console.log("sidebar",user);
+  // console.log("sidebar",user);
   const userRole = user?.role; 
   const { colors, font } = useTheme();
   const location = useLocation();
