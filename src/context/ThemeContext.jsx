@@ -50,7 +50,7 @@ export const ThemeProvider = ({ children }) => {
     theme1: {
       light: {
         primary: '#2F5755',
-        bgsoft: '#5A9690',
+        bgsoft: '#EDFFF0',
         bg: '#E0D9D9',
         text: '#432323',
         text2:'#222831'
