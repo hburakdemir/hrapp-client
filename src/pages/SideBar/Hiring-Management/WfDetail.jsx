@@ -6,7 +6,7 @@ import { taskAPI } from "../../../api/modules/task";
 import toast from "react-hot-toast";
 import { useTheme } from "../../../context/ThemeContext";
 import Layout from "../../../components/layout/Layout";
-import {ChevronLeft,ChevronRight,Edit2,Trash2,X,User,CalendarCheckIcon,Plus,} from "lucide-react";
+import {ChevronLeft,Edit2,Trash2,X,User,CalendarCheckIcon,Plus,} from "lucide-react";
 
 const WfDetails = () => {
   const { colors } = useTheme();

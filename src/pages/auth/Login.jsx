@@ -23,32 +23,34 @@ const Login = () => {
     setForm({ ...form, [e.target.name]: e.target.value });
 
 const handleSubmit = async (e) => {
-  e.preventDefault();
-  setLoading(true);
-  try {
-    const res = await authAPI.login(form);
-    const { accessToken } = res.data.data;
+    e.preventDefault();
+    setLoading(true);
+    try {
+        const res = await authAPI.login(form);
+        const { accessToken } = res.data.data;
 
-    login({ accessToken }); // artık user bilgisi decode ile geliyor
+        login({ accessToken });
 
-    // Rol bazlı yönlendirme
-    const decoded = jwtDecode(accessToken);
-    if (decoded.role === "CANDIDATE") {
-      const profileRes = await authAPI.getProfileStauts();
-      if (!profileRes.data.data.profileComplete) {
-        navigate("/profile");
-      } else {
-        navigate("/");
-      }
-    } else {
-      navigate("/");
+        const decoded = jwtDecode(accessToken);
+        
+        if (decoded.role === "CANDIDATE") {
+            const profileRes = await authAPI.getProfileStatus();
+            const isProfileComplete = profileRes.data.data.isProfileComplete;
+
+            if (!isProfileComplete) {
+                navigate("/profile"); 
+            } else {
+                navigate("/my-applications"); 
+            }
+        } else {
+            navigate("/"); 
+        }
+
+    } catch (err) {
+        toast.error(err.response?.data?.message || "Giriş başarısız");
+    } finally {
+        setLoading(false);
     }
-
-  } catch (err) {
-    toast.error(err.response?.data?.message || "Giriş başarısız");
-  } finally {
-    setLoading(false);
-  }
 };
 
 

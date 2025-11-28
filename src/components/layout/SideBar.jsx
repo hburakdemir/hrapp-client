@@ -62,7 +62,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       roles: ['ADMIN', 'HR'],
       children: [
         { label: 'İstatistikler', path: '/stats', icon: BarChart3, roles: ['ADMIN'] },
-        { label: 'Yeni Form', path: '/new-form', icon: Plus, roles: ['ADMIN', 'HR'] },
+        { label: 'Şablonlar', path: '/new-form', icon: Plus, roles: ['ADMIN', 'HR'] },
         { label: 'Başvuranlar', path: '/applicants', icon: Users, badge: '12', roles: ['ADMIN', 'HR'] }
       ]
     },
@@ -84,9 +84,9 @@ const Sidebar = ({ isOpen, onClose }) => {
       label: 'Başvurularım',
       icon: ClipboardList,
       type: 'group',
-      roles: ['ADMIN'],
+      roles: ['ADMIN','CANDIDATE'],
       children: [
-        { label: 'Başvurularım', path: '/my-applications', icon: ClipboardList, roles: ['ADMIN'] },
+        { label: 'Başvurularım', path: '/my-applications', icon: ClipboardList, roles: ['ADMIN','CANDIDATE'] },
         { label: 'Profil', path: '/profile', icon: User, roles: ['CANDIDATE'] }
       ]
     },
