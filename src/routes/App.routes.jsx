@@ -11,6 +11,7 @@ import Profile from "../pages/profile/Profile";
 import Stats from "../pages/SideBar/Application-Management/Stats";
 import Applicants from "../pages/SideBar/Application-Management/Applicants";
 import NewWorkflow from "../pages/SideBar/Application-Management/NewWorkflow";
+import AllAssignments from "../pages/SideBar/Application-Management/AllAssignment";
 
 //sidebar-hrmngmnt
 import MyForms from "../pages/SideBar/Hiring-Management/MyForms";
@@ -124,6 +125,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute allowedRoles={['ADMIN']}>
             <Permissions />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/allassign"
+        element={
+          <ProtectedRoute allowedRoles={['ADMIN']}>
+            <AllAssignments />
           </ProtectedRoute>
         }
       />

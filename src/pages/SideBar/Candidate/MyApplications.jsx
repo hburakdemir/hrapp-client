@@ -213,8 +213,9 @@ const MyApplications = () => {
     );
   }
 
-  const status = getStatusBadge(assignment.workflow?.stages);
-  const stages = assignment.workflow?.stages || [];
+const status = getStatusBadge(assignment.stages);
+const stages = assignment.stages || [];
+
 
   return (
     <Layout>
